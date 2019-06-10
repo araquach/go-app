@@ -11,11 +11,28 @@
 <section class="section">
     <div class="container">
         <h1 class="title">
-            My first Deployed Site!
+            Hello World
         </h1>
         <p class="subtitle">
             My first website with <strong>Google App Engine</strong>!
         </p>
+        <figure class="image">
+            <img src="static/images/gcp-gopher.svg" alt="Gopher">
+        </figure>
+
+        {{with .Notice}}
+        <div id="notice">
+            {{.}}
+        </div>
+        {{end}}
+
+        <form action="/" method="post" class="form">
+            <p class="label">Name:</p>
+            <input name="name" value="{{.Name}}">
+            <p class="label">Message:</p>
+            <input name="message">
+            <button class="button">Submit</button>
+        </form>
     </div>
 </section>
 </body>
