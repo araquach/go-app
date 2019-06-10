@@ -1,56 +1,50 @@
 package main
 
 import (
-	"fmt"
 	"google.golang.org/appengine"
 	"html/template"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
-type templateParams struct {
-	Notice string
-	Name string
+var homeTemplate *template.Template
+var contactTemplate *template.Template
+
+func home(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	if err := homeTemplate.Execute(w, nil); err != nil {
+		panic(err)
+	}
 }
 
-var (
-	indexTemplate = template.Must(template.ParseFiles("index.html"))
-	aboutTemplate = template.Must(template.ParseFiles("about.html"))
-)
+func contact(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html")
+	if err := contactTemplate.Execute(w, nil); err != nil {
+		panic(err)
+	}
+}
+
+func init() {
+	r := mux.NewRouter()
+	r.HandleFunc("/", home)
+	r.HandleFunc("/contact", contact)
+
+	// The path "/" matches everything not matched by some other path.
+	http.Handle("/", r)
+}
 
 func main() {
-
-	http.HandleFunc("/", indexHandler)
-	http.HandleFunc("/about", aboutHandler)
+	var err error
+	homeTemplate, err = template.ParseFiles(
+		"views/home.gohtml")
+	if err != nil {
+		panic(err)
+	}
+	contactTemplate, err = template.ParseFiles(
+		"views/contact.gohtml")
+	if err != nil {
+		panic(err)
+	}
 	appengine.Main() // Starts the server to receive requests
-}
-
-func indexHandler(w http.ResponseWriter, r *http.Request) {
-	params := templateParams{}
-
-	if r.Method =="GET" {
-		indexTemplate.Execute(w, params)
-		return
-	}
-
-	name := r.FormValue("name")
-	params.Name = name
-	if name == "" {
-		name = "Anonymous Gopher"
-	}
-
-	if r.FormValue("message") == "" {
-		w.WriteHeader(http.StatusBadRequest)
-
-		params.Notice = "No Message provided"
-		indexTemplate.Execute(w, params)
-		return
-	}
-
-	params.Notice = fmt.Sprintf("Thanks you for your submission, %s", name)
-
-	indexTemplate.Execute(w, params)
-}
-
-func aboutHandler(w http.ResponseWriter, r *http.Request) {
-	aboutTemplate.Execute(w, nil)
 }
