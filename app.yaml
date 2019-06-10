@@ -15,14 +15,17 @@
 runtime: go
 api_version: go1
 
+skip_files:
+
+  - ^(node_modules/.*)
+
 handlers:
 
   # All URLs are handled by the Go application script
 
   # Otherwise, find file in static directory
-  - url: /(.*\.(gif|png|jpg))$
-    static_files: static/\1
-    upload: static/.*\.(gif|png|jpg)$
+  - url: /static
+    static_dir: static
 
   - url: /.*
     script: _go_app
