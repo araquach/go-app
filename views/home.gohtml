@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Hello Bulma!</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.5/css/bulma.min.css">
+    <link rel="stylesheet" href="static/style.css">
+    <script defer src="https://use.fontawesome.com/releases/v5.3.1/js/all.js"></script>
+</head>
+<body>
+<section class="section">
+    <div class="container">
+        <h1 class="title">
+            Hello World - My first Deployed Site!
+        </h1>
+        <p class="subtitle">
+            My first website with <strong>Google App Engine</strong>!
+        </p>
+        <figure class="image">
+            <img src="static/images/gcp-gopher.svg" alt="Gopher">
+        </figure>
+
+        {{with .Notice}}
+            <div id="notice">
+                {{.}}
+            </div>
+        {{end}}
+
+        <form action="/" method="post" class="form">
+            <p class="label">Name:</p>
+            <input name="name" value="{{.Name}}">
+            <p class="label">Message:</p>
+            <input name="message">
+            <button class="button">Submit</button>
+        </form>
+    </div>
+</section>
+</body>
+</html>
